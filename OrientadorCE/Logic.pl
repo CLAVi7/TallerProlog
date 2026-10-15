@@ -46,7 +46,7 @@ revisar_respuesta(end_of_file, _, _) :-
     write('OrientadorCE: Se cerro la entrada, no puedo continuar.'), nl,
     fail.
 revisar_respuesta(Texto, _, Preferencia) :-
-    interpretar(Texto, Preferencia),
+    interpretar_validado(Texto, Preferencia),
     !.
 revisar_respuesta(_, Pregunta, Preferencia) :-
     write('OrientadorCE: No entendi tu respuesta, puedes decirlo de otra forma?'), nl,
