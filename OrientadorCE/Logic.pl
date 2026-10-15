@@ -45,9 +45,13 @@ revisar_respuesta(end_of_file, _, _) :-
     nl,
     write('OrientadorCE: Se cerro la entrada, no puedo continuar.'), nl,
     fail.
+
+% Usa interpretar_validado/2 de BNF.pl: acepta tíldes, mayúsculas
+% y signos de puntuación, y revisa la concordancia (gusta/gustan).
 revisar_respuesta(Texto, _, Preferencia) :-
-    interpretar(Texto, Preferencia),
+    interpretar_validado(Texto, Preferencia),
     !.
+% Frase no reconocida: no se registra nada y se repite la pregunta.
 revisar_respuesta(_, Pregunta, Preferencia) :-
     write('OrientadorCE: No entendi tu respuesta, puedes decirlo de otra forma?'), nl,
     obtener_respuesta(Pregunta, Preferencia).
@@ -64,7 +68,7 @@ registrar(Preferencia, Acumuladas, [Preferencia|Resto]) :-
     delete(SinContraria, Preferencia, Resto).
 
 
-% ----- Reglas de recomendacion -----
+% ----- Reglas de recomendación -----
 
 descartada(Profesion, Preferencias) :-
     profesion(Profesion, _, Incompatibles),

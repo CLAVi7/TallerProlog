@@ -156,3 +156,51 @@ test(tecnologia_negada) :-
     ).
 
 :- end_tests(caso3).
+
+% Caso 4: respuesta no reconocida 
+
+% Ejecuta Meta leyendo las respuestas de la lista Respuestas (una por linea) en lugar del teclado, 
+% y devuelve en Salida todo lo que el programa escribio en consola.
+con_entrada(Respuestas, Meta, Salida) :-
+    atomic_list_concat(Respuestas, '\n', Unidas),
+    string_concat(Unidas, "\n", Texto),
+    once(stream_property(Teclado, alias(user_input))),
+    open_string(Texto, Entrada),
+    setup_call_cleanup(
+        set_stream(Entrada, alias(user_input)),
+        with_output_to(string(Salida), Meta),
+        ( set_stream(Teclado, alias(user_input)),
+          close(Entrada) )).
+
+veces(Texto, Subtexto, Total) :-
+    aggregate_all(count, sub_string(Texto, _, _, _, Subtexto), Total).
+
+:- begin_tests(caso4).
+
+% La frase ajena no se registra: solo queda la preferencia valida.
+test(no_registra_frase_ajena) :-
+    con_entrada(
+        ["La ventana está abierta.",
+         "Me gustan las matemáticas."],
+        preguntar(['Que te gusta?'], [], Preferencias),
+        Salida),
+    assertion(Preferencias == [positiva(matematicas)]),
+    assertion(veces(Salida, "No entendi tu respuesta", 1)),
+    assertion(veces(Salida, "Que te gusta?", 2)).
+
+% Conversacion completa: pide reformular una vez y luego recomienda.
+test(conversacion_completa) :-
+    con_entrada(
+        ["La ventana está abierta.",
+         "Me gustan las matemáticas.",
+         "Me gusta la tecnología.",
+         "Me gusta resolver problemas.",
+         "No me interesa ayudar a las personas.",
+         "No me gusta escuchar a los demás."],
+        iniciar,
+        Salida),
+    assertion(veces(Salida, "No entendi tu respuesta", 1)),
+    assertion(veces(Salida,
+        "te recomiendo ingenieria computadores.", 1)).
+
+:- end_tests(caso4).
