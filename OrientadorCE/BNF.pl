@@ -73,6 +73,35 @@ interes(ayudar_personas) -->
 interes(escuchar) -->
     [escuchar, a, los, demas].
 
+interes(biologia) -->
+    [la, biologia].
+
+interes(ciencias) -->
+    [las, ciencias].
+
+interes(diseno) -->
+    [el, diseno].
+
+interes(creatividad) -->
+    [la, creatividad].
+
+interes(lectura) -->
+    [la, lectura].
+
+interes(comunicacion) -->
+    [la, comunicacion].
+
+interes(negocios) -->
+    [los, negocios].
+
+interes(ensenar) -->
+    [ensenar].
+
+interes(construccion) -->
+    [la, construccion].
+
+interes(animales) -->
+    [los, animales].
 % Convierte una frase de texto en una preferencia.
 interpretar(Texto, Resultado) :-
     string_lower(Texto, Minusculas),
