@@ -20,8 +20,14 @@ Reglas principales de Logic.pl:
 - recomendar/1: reúne las profesiones compatibles y muestra las que tienen más coincidencias, o avisa que no hay ninguna.
 
 Las preguntas son hechos pregunta/1 y la conversación (preguntar, pedir que reformulen y mostrar el resultado) se controla con iniciar/0.
+
 3. Gramática BNF y ejemplos de frases admitidas.
 - Responsable: Sebastián.
+
+Se agregó interpretar_validado/2 para validar concordancia y normalizar
+tildes. Ejemplos: “Me gusta la tecnología” y “No me gusta la tecnología”.
+Gramática formal: [BNF.md](BNF.md). Pruebas: PruebasBNF.pl.
+
 4. Explicación del procedimiento utilizado para generar recomendaciones.
 - Responsable: José.
 
@@ -34,6 +40,9 @@ El programa hace una pregunta a la vez y guarda cada frase reconocida como posit
 5. Los cinco casos de prueba, con resultados esperados y obtenidos.
 - Pablo: casos 1 y 2 (perfil tecnológico y social).
 - Sebastián: caso 3 (negación de una afinidad).
+  Con matemáticas y resolver problemas, cambiar “Me gusta la tecnología” por “No me gusta la tecnología” cambió la recomendación de Computadores
+  a Civil. Esperado y obtenido coinciden: pasó.
+
 - Javier: caso 4 (respuesta no reconocida).
 - José: caso 5 (perfil sin coincidencias).
 
