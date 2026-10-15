@@ -19,3 +19,4 @@ se inccluyen 10 profeseciones, contando con 3 afinidades y 2 incompatibilidades 
 - Sebastián: caso 3 (negación de una afinidad).
 - Javier: caso 4 (respuesta no reconocida).
 - José: caso 5 (perfil sin coincidencias).
+enlace al repositorio: https://github.com/CLAVi7/TallerProlog.git
