@@ -3,6 +3,9 @@ Miembros: Sebastian Alvarado, Javier Barraza, Jose Umaña, Pablo Rivera
 
 1. Instrucciones para ejecutar y utilizar el programa.
 - Responsable: Javier.
+
+Requiere SWI-Prolog 8.4 o superior. Desde la carpeta OrientadorCE: `swipl Logic.pl` y luego `?- iniciar.` (Logic.pl carga BD.pl y BNF.pl). Cada pregunta se responde con una frase completa, por ejemplo "Me gustan las matemáticas" o "No me gusta la tecnología"; si no se reconoce, el programa pide reformularla. Pruebas: `swipl PruebasBNF.pl` y luego `?- run_tests.`
+
 2. Descripción breve de los hechos, las reglas y las listas utilizadas.
   
 El archivo BD.pl es conformado por los conocimientos que formar al OrientadorCE, estos estan representados mediante hechos y listas de prolog. Utilizamos el predicado profesion/3, donde se almacenan los nombres de cada profesion y sis afinidades e incompatibilidades asignadas.
@@ -44,6 +47,9 @@ El programa hace una pregunta a la vez y guarda cada frase reconocida como posit
   a Civil. Esperado y obtenido coinciden: pasó.
 
 - Javier: caso 4 (respuesta no reconocida).
+
+  Con "La ventana está abierta." como primera respuesta, el programa pidió reformular sin registrar nada; luego "Me gustan las matemáticas.", "Me gusta la tecnología.", "Me gusta resolver problemas.", "No me interesa ayudar a las personas." y "No me gusta escuchar a los demás." dieron Ingeniería en Computadores. Esperado y obtenido coinciden: pasó (tests caso4 en PruebasBNF.pl).
+
 - José: caso 5 (perfil sin coincidencias).
 
   Caso 5 (perfil sin coincidencias):
@@ -52,3 +58,8 @@ El programa hace una pregunta a la vez y guarda cada frase reconocida como posit
   - Resultado obtenido: "No tengo una recomendacion compatible con tus preferencias."
   - Estado: pasó.
   - Justificación: en BD.pl la tecnología es afinidad solo de ingenieria_computadores y diseno_grafico. La primera se descarta porque matematicas está en sus incompatibilidades y fue rechazada. La segunda se descarta porque diseno está en sus incompatibilidades y también fue rechazado. Las demás profesiones no tienen coincidencias y la regla compatible/3 exige al menos una.
+
+6. Limitaciones conocidas.
+- Responsable: Javier.
+
+Vocabulario cerrado (16 intereses y 6 estructuras), una preferencia por frase (sin "y" ni "pero"), la respuesta no se relaciona con la pregunta hecha, siempre son las mismas 5 preguntas y todas las afinidades pesan igual. Los nombres de profesión se muestran sin tildes.
