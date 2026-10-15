@@ -20,8 +20,43 @@ Reglas principales de Logic.pl:
 - recomendar/1: reúne las profesiones compatibles y muestra las que tienen más coincidencias, o avisa que no hay ninguna.
 
 Las preguntas son hechos pregunta/1 y la conversación (preguntar, pedir que reformulen y mostrar el resultado) se controla con iniciar/0.
+
 3. Gramática BNF y ejemplos de frases admitidas.
 - Responsable: Sebastián.
+
+Se agregó interpretar_validado/2 sin modificar las reglas originales.
+Reutiliza el vocabulario de interes//1, valida singular y plural,
+normaliza tildes y devuelve positiva(Interes) o negativa(Interes).
+
+```bnf
+<oracion> ::= <afirmacion> | "no" <afirmacion>
+<afirmacion> ::= "me gusta" <singular>
+              | "me gustan" <plural>
+              | "me interesa" <singular>
+              | "me interesan" <plural>
+              | "disfruto" <interes>
+              | "prefiero" <interes>
+<interes> ::= <singular> | <plural>
+<singular> ::= "la tecnologia" | "la biologia" | "el diseno"
+            | "la creatividad" | "la lectura" | "la comunicacion"
+            | "la construccion" | "trabajar con tecnologia"
+            | "resolver problemas" | "ayudar a las personas"
+            | "escuchar a los demas" | "ensenar"
+<plural> ::= "las matematicas" | "las ciencias"
+           | "los negocios" | "los animales"
+```
+
+Ejemplos:
+- "Me gusta la tecnología" → positiva(tecnologia).
+- "No me gusta la tecnología" → negativa(tecnologia).
+- "Me interesan las ciencias" → positiva(ciencias).
+
+Se rechazan errores de concordancia, vocabulario desconocido y
+respuestas aisladas como "sí" o "no".
+
+Pruebas: cargar PruebasBNF.pl y ejecutar run_tests.
+Resultado: 24 pruebas aprobadas.
+
 4. Explicación del procedimiento utilizado para generar recomendaciones.
 - Responsable: José.
 
@@ -34,6 +69,22 @@ El programa hace una pregunta a la vez y guarda cada frase reconocida como posit
 5. Los cinco casos de prueba, con resultados esperados y obtenidos.
 - Pablo: casos 1 y 2 (perfil tecnológico y social).
 - Sebastián: caso 3 (negación de una afinidad).
+  Entradas:
+    1. Me gustan las matemáticas.
+    2. Me gusta la tecnología.
+    3. Me gusta resolver problemas.
+    4. No me interesa ayudar a las personas.
+    5. No me gusta escuchar a los demás.
+  Se repite cambiando únicamente la segunda frase por
+  "No me gusta la tecnología".
+  Esperado y obtenido en las pruebas automatizadas:
+  - Afirmativa: ingenieria_computadores, con 3 coincidencias.
+  - Negativa: ingenieria_civil, con 2 coincidencias.
+  Estado: pasó. La negación se registra como negativa(tecnologia)
+  y descarta Computadores mediante descartada/2.
+  Las pruebas usan interpretar_validado/2 y las reglas actuales
+  de Logic.pl.
+
 - Javier: caso 4 (respuesta no reconocida).
 - José: caso 5 (perfil sin coincidencias).
 

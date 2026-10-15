@@ -108,3 +108,65 @@ interpretar(Texto, Resultado) :-
     split_string(Minusculas, " ", ".,!? ", Palabras),
     maplist(atom_string, Tokens, Palabras),
     phrase(oracion(Resultado), Tokens).
+
+
+:- encoding(utf8).
+
+% Validacion adicional de concordancia y normalizacion.
+interpretar_validado(Texto, Resultado) :-
+    string(Texto),
+    string_lower(Texto, Minusculas),
+    string_chars(Minusculas, Caracteres),
+    maplist(normalizar_bnf, Caracteres, Normalizados),
+    string_chars(Normalizada, Normalizados),
+    split_string(Normalizada, " \t\r\n", " \t\r\n.,!?¡¿", Palabras),
+    maplist(atom_string, Tokens, Palabras),
+    once(phrase(oracion_validada(Resultado), Tokens)).
+
+oracion_validada(positiva(Interes)) -->
+    afirmacion_validada(Interes).
+
+oracion_validada(negativa(Interes)) -->
+    [no],
+    afirmacion_validada(Interes).
+
+afirmacion_validada(Interes) -->
+    [me, gusta], interes_singular(Interes).
+
+afirmacion_validada(Interes) -->
+    [me, gustan], interes_plural(Interes).
+
+afirmacion_validada(Interes) -->
+    [me, interesa], interes_singular(Interes).
+
+afirmacion_validada(Interes) -->
+    [me, interesan], interes_plural(Interes).
+
+afirmacion_validada(Interes) -->
+    [disfruto], interes(Interes).
+
+afirmacion_validada(Interes) -->
+    [prefiero], interes(Interes).
+
+% Reutiliza el vocabulario original sin modificarlo.
+interes_singular(Interes) -->
+    interes(Interes),
+    { \+ interes_es_plural(Interes) }.
+
+interes_plural(Interes) -->
+    interes(Interes),
+    { interes_es_plural(Interes) }.
+
+interes_es_plural(matematicas).
+interes_es_plural(ciencias).
+interes_es_plural(negocios).
+interes_es_plural(animales).
+
+normalizar_bnf('á', a) :- !.
+normalizar_bnf('é', e) :- !.
+normalizar_bnf('í', i) :- !.
+normalizar_bnf('ó', o) :- !.
+normalizar_bnf('ú', u) :- !.
+normalizar_bnf('ü', u) :- !.
+normalizar_bnf('ñ', n) :- !.
+normalizar_bnf(Caracter, Caracter).
